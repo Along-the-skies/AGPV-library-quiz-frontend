@@ -24,7 +24,9 @@
     <p id="quiz-status">Loading quiz status...</p>
 
     <!-- Start Quiz -->
-    <a href="questions.html" class="btn">Start Quiz</a>
+
+    <button id="start-btn" class="btn" style="display:none;">Start Quiz</button>
+
 
     <!-- Rules under Start Quiz -->
     <div class="rules">
@@ -59,12 +61,28 @@
       try {
         const res = await fetch(`${API_BASE}/reading-day-quiz`);
         const data = await res.json();
-        document.getElementById("quiz-status").textContent =
-          `Status: ${data.status} | Dates: ${data.startDate} → ${data.endDate}`;
+
+        const statusEl = document.getElementById("quiz-status");
+        const startBtn = document.getElementById("start-btn");
+
+        if (data.status === "not_started") {
+          statusEl.textContent = `📅 Quiz starts on ${data.startDate}`;
+          startBtn.style.display = "none";
+        } else if (data.status === "ended") {
+          statusEl.textContent = `⏳ Quiz ended on ${data.endDate}`;
+          startBtn.style.display = "none";
+        } else if (data.status === "online") {
+          statusEl.textContent = "✅ Quiz is live!";
+          startBtn.style.display = "inline-block";
+          startBtn.onclick = () => {
+            window.location.href = "questions.html";
+          };
+        }
       } catch (err) {
         document.getElementById("quiz-status").textContent = "Error loading quiz status.";
       }
     }
+
 
     // Init
     loadQuizStatus();

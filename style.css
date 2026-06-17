@@ -240,6 +240,7 @@ body.dark-mode footer {
   background: #fafafa;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  
 }
 .choice-btn {
   display: block;
@@ -257,6 +258,12 @@ body.dark-mode footer {
 }
 .choice-btn:hover {
   background: #a78bfa;
+}
+.login-box {
+  position: static;       /* no absolute centering */
+  transform: none;
+  width: 90%;             /* shrink to fit screen */
+  margin: 40px auto;
 }
 
 /* Dark mode for login + quiz */
