@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Question</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="login-form" class="login-box">
+    <h2>Login to Quiz</h2>
+    <input type="text" id="name" class="input-field" placeholder="Name" required><br><br>
+    <input type="text" id="phone" class="input-field" placeholder="Phone" required><br><br>
+    <button class="btn" onclick="login()">Login</button>
+  </div>
+
+  <div id="quiz-content" class="quiz-box" style="display:none;">
+    <h2 id="quiz-question">Loading question...</h2>
+    <div id="quiz-choices"></div>
+    <p id="result"></p>
+  </div>
+
+  <script>
+  const API_BASE = "https://agvp-library-backend.onrender.com"; // local backend
+  let userName = "";
+  let userPhone = "";
+
+  function login() {
+    userName = document.getElementById("name").value.trim();
+    userPhone = document.getElementById("phone").value.trim();
+
+    if (!userName || !userPhone) {
+      alert("Please enter both name and phone.");
+      return;
+    }
+
+    document.getElementById("login-form").style.display = "none";
+    document.getElementById("quiz-content").style.display = "block";
+
+    loadQuestion();
+  }
+
+  async function loadQuestion() {
+    const res = await fetch(`${API_BASE}/question`);
+    const data = await res.json();
+
+    // ✅ Show the actual question text
+    document.getElementById("quiz-question").textContent =
+      `Q${data.questionNo}: ${data.question}`;
+
+    const choicesDiv = document.getElementById("quiz-choices");
+    choicesDiv.innerHTML = "";
+
+    // ✅ Loop through choices and render buttons
+    if (data.choices) {
+      data.choices.forEach((choice, i) => {
+        const key = String.fromCharCode(65 + i); // A, B, C, D
+        const btn = document.createElement("button");
+        btn.className = "btn choice-btn";
+        btn.textContent = `${key}: ${choice}`;
+        btn.onclick = () => submitAnswer(data.questionNo, key);
+        choicesDiv.appendChild(btn);
+      });
+    }
+  }
+
+  async function submitAnswer(questionNo, choice) {
+    const payload = {
+      name: userName,
+      phone: userPhone,
+      answer: choice,
+      questionNo: questionNo,
+      timeTaken: 10 // placeholder
+    };
+
+    const res = await fetch(`${API_BASE}/submit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await res.json();
+    document.getElementById("result").textContent =
+      result.isCorrect ? "✅ Correct!" : "❌ Wrong!";
+  }
+</script>
+
+</body>
+</html>

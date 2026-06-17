@@ -213,6 +213,73 @@ body.dark-mode footer {
   color: #e6e0ff;
 }
 
+/* Login + Quiz Styling */
+.login-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  text-align: center;
+}
+.input-field {
+  width: 90%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.quiz-box {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.choice-btn {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px;
+  text-align: left;
+  border: none;
+  border-radius: 6px;
+  background: #8b6ccf;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.choice-btn:hover {
+  background: #a78bfa;
+}
+
+/* Dark mode for login + quiz */
+body.dark-mode .login-box {
+  background: #2a1b4d;
+  color: #e6e0ff;
+}
+body.dark-mode .input-field {
+  background: #3b2a63;
+  border: 1px solid #6a3fb8;
+  color: #e6e0ff;
+}
+body.dark-mode .quiz-box {
+  background: #3b2a63;
+  color: #e6e0ff;
+}
+body.dark-mode .choice-btn {
+  background: #a678ff;
+}
+body.dark-mode .choice-btn:hover {
+  background: #c19aff;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   header {
@@ -224,19 +291,15 @@ body.dark-mode footer {
     margin-top: 10px;
   }
   .hero {
-    padding: 60px 20px;
+    padding: 20px;
   }
-  .hero h1 {
-    font-size: 2em;
-    margin-bottom: 15px;
+  .content {
+    padding: 10px;
   }
-  .hero p {
-    font-size: 1em;
-    margin-bottom: 20px;
+  .card {
+    padding: 15px;
   }
-  .btn {
-    width: 100%;
-    padding: 16px;
-    margin-top: 10px;
+  footer {
+    padding: 10px;
   }
 }
