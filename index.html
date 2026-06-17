@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azhikode Grama Panchayat Vagbhadananda Library</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">📚 Vagbhadananda Library</div>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#programs">Programs</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="hero-text">
+      <h1>Welcome to Vagbhadananda Library</h1>
+      <p>Serving Azhikode with creativity, culture, and knowledge.</p>
+      <a href="#programs" class="btn">Explore Programs</a>
+    </div>
+  </section>
+
+  <!-- Programs -->
+  <section id="programs" class="content">
+    <h2>Featured Program</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>🌟 Online Quiz Competition</h3>
+        <p>Celebrate Reading Day with our 2‑week online quiz competition. Join and test your knowledge!</p>
+        <a href="quiz.html" class="btn">Go to Quiz Page</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Events -->
+  <section id="events" class="content">
+    <h2>Upcoming Events</h2>
+    <p>📅 Reading Day Quiz Competition runs for 2 weeks.</p>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <p>📍 Place: Azhikode</p>
+    <p>📧 Librarian: Binoy Mathew | 📞 Phone: 94953 96517</p>
+    <p>&copy; 2026 Vagbhadananda Library</p>
+  </footer>
+
+  <!-- Dark/Light Mode Script -->
+  <script>
+    const toggleBtn = document.getElementById('theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      toggleBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+  </script>
+</body>
+</html>

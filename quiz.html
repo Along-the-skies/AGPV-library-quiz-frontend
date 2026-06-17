@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reading Day Quiz</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">📚 Vagbhadananda Library</div>
+    <nav>
+      <ul>
+        <li><a href="main.html">Back to Home</a></li>
+      </ul>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Reading Day Quiz</h1>
+    <p id="quiz-status">Loading quiz status...</p>
+
+    <!-- Start Quiz -->
+    <a href="quiz_question.html" class="btn">Start Quiz</a>
+
+    <!-- Rules under Start Quiz -->
+    <div class="rules">
+      <h2>Quiz Guidelines</h2>
+      <ul style="max-width:700px; margin:20px auto; text-align:left; line-height:1.8;">
+        <li>✅ The quiz runs for 2 weeks as part of Reading Day.</li>
+        <li>✅ Each participant can attempt once per day.</li>
+        <li>✅ Questions will cover general knowledge and reading topics.</li>
+        <li>✅ Winners will be announced at the end of the celebration.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Vagbhadananda Library</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    const API_BASE = "https://agvp-library-backend.onrender.com"; // replace with your Render link
+
+    // Theme toggle
+    const toggleBtn = document.getElementById('theme-toggle');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      toggleBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+
+    // Load quiz status from backend
+    async function loadQuizStatus() {
+      try {
+        const res = await fetch(`${API_BASE}/reading-day-quiz`);
+        const data = await res.json();
+        document.getElementById("quiz-status").textContent =
+          `Status: ${data.status} | Dates: ${data.startDate} → ${data.endDate}`;
+      } catch (err) {
+        document.getElementById("quiz-status").textContent = "Error loading quiz status.";
+      }
+    }
+
+    // Init
+    loadQuizStatus();
+  </script>
+</body>
+</html>
