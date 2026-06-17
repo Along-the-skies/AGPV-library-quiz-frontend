@@ -59,6 +59,23 @@
     </nav>
   </header>
 
+  <!-- Admin Login Form -->
+<div id="admin-login" class="login-box">
+  <h2>Admin Login</h2>
+  <input type="password" id="admin-password" class="input-field" placeholder="Enter Admin Password">
+  <button class="btn" onclick="adminLogin()">Login</button>
+  <p id="login-error" style="color:red;"></p>
+</div>
+
+<!-- Hidden Leaderboards -->
+<div id="admin-content" class="content" style="display:none;">
+  <h2>Leaderboards</h2>
+  <div class="tables-grid" id="tables-container">
+    <!-- 14 empty tables here -->
+  </div>
+</div>
+
+
   <!-- Hero -->
   <section class="hero">
     <h1>📚 Admin Submissions View</h1>
