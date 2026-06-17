@@ -6,36 +6,66 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Login -->
   <div id="login-form" class="login-box">
     <h2>Login to Quiz</h2>
     <input type="text" id="name" class="input-field" placeholder="Name" required><br><br>
     <input type="text" id="phone" class="input-field" placeholder="Phone" required><br><br>
-    <button class="btn" onclick="login()">Login</button>
+    <button id="login-btn" class="btn">Login</button>
+    <p id="login-error" style="color:red;"></p>
   </div>
 
+  <!-- Quiz -->
   <div id="quiz-content" class="quiz-box" style="display:none;">
-    <h2 id="quiz-question">Loading question...</h2>
-    <div id="quiz-choices"></div>
+    <h2 id="question-text">Loading question...</h2>
+    <div id="choices"></div>
     <p id="result"></p>
   </div>
 
   <script>
-  const API_BASE = "https://agvp-library-backend.onrender.com"; // local backend
+  const API_BASE = "https://agvp-library-backend.onrender.com";
   let userName = "";
   let userPhone = "";
+  let startTime;
 
-  function login() {
-    userName = document.getElementById("name").value.trim();
-    userPhone = document.getElementById("phone").value.trim();
+  // Login button
+  document.getElementById("login-btn").onclick = () => {
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const errorEl = document.getElementById("login-error");
 
-    if (!userName || !userPhone) {
-      alert("Please enter both name and phone.");
+    // Admin bypass
+    if (name.toLowerCase() === "admin" && phone === "0000000000") {
+      alert("Admin test login successful.");
+      startQuiz(name, phone);
       return;
     }
 
+    // Normal validation
+    if (!name || !phone) {
+      errorEl.textContent = "Please enter both name and phone.";
+      return;
+    }
+
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phone)) {
+      errorEl.textContent = "Please enter a valid 10-digit phone number.";
+      return;
+    }
+
+    if (name.toLowerCase() === "admin") {
+      errorEl.textContent = "The name 'Admin' is reserved.";
+      return;
+    }
+
+    startQuiz(name, phone);
+  };
+
+  function startQuiz(name, phone) {
+    userName = name;
+    userPhone = phone;
     document.getElementById("login-form").style.display = "none";
     document.getElementById("quiz-content").style.display = "block";
-
     loadQuestion();
   }
 
@@ -43,33 +73,51 @@
     const res = await fetch(`${API_BASE}/question`);
     const data = await res.json();
 
-    // ✅ Show the actual question text
-    document.getElementById("quiz-question").textContent =
-      `Q${data.questionNo}: ${data.question}`;
+    const qText = document.getElementById("question-text");
+    const choicesDiv = document.getElementById("choices");
+    const feedback = document.getElementById("result");
 
-    const choicesDiv = document.getElementById("quiz-choices");
     choicesDiv.innerHTML = "";
+    feedback.textContent = "";
 
-    // ✅ Loop through choices and render buttons
-    if (data.choices) {
-      data.choices.forEach((choice, i) => {
-        const key = String.fromCharCode(65 + i); // A, B, C, D
-        const btn = document.createElement("button");
-        btn.className = "btn choice-btn";
-        btn.textContent = `${key}: ${choice}`;
-        btn.onclick = () => submitAnswer(data.questionNo, key);
-        choicesDiv.appendChild(btn);
-      });
+    // Handle quiz status
+    if (data.status === "not_started") {
+      qText.textContent = "📅 Quiz starts on June 19";
+      return;
     }
+    if (data.status === "ended") {
+      qText.textContent = "⏳ Quiz has ended.";
+      return;
+    }
+    if (data.status === "no_question") {
+      qText.textContent = "No question available today.";
+      return;
+    }
+
+    // Show question
+    qText.textContent = `Q${data.questionNo}: ${data.question}`;
+    startTime = Date.now();
+
+    // Create choice buttons
+    data.choices.forEach((choice, i) => {
+      const key = String.fromCharCode(65 + i); // A, B, C, D
+      const btn = document.createElement("button");
+      btn.className = "btn choice-btn";
+      btn.textContent = `${key}: ${choice}`;
+      btn.onclick = () => submitAnswer(data.questionNo, key);
+      choicesDiv.appendChild(btn);
+    });
   }
 
   async function submitAnswer(questionNo, choice) {
+    const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+
     const payload = {
       name: userName,
       phone: userPhone,
       answer: choice,
       questionNo: questionNo,
-      timeTaken: 10 // placeholder
+      timeTaken: timeTaken
     };
 
     const res = await fetch(`${API_BASE}/submit`, {
@@ -79,10 +127,38 @@
     });
 
     const result = await res.json();
-    document.getElementById("result").textContent =
-      result.isCorrect ? "✅ Correct!" : "❌ Wrong!";
-  }
-</script>
+    const feedback = document.getElementById("result");
 
+    if (result.status === "error" && result.message.includes("Already submitted")) {
+      feedback.textContent = "⚠️ Sorry, you've already done the quiz today.";
+    } else if (result.status === "error") {
+      feedback.textContent = `❌ ${result.message}`;
+    } else {
+      feedback.textContent = result.isCorrect ? "✅ Correct!" : "❌ Wrong!";
+      loadLeaderboard();
+    }
+
+    // Disable choice buttons after submission
+    document.querySelectorAll(".choice-btn").forEach(btn => btn.disabled = true);
+  }
+
+  async function loadLeaderboard() {
+    const res = await fetch(`${API_BASE}/leaderboard`);
+    const data = await res.json();
+
+    const lb = document.createElement("div");
+    lb.innerHTML = "<h3>Today's Leaderboard</h3>";
+    const list = document.createElement("ol");
+
+    data.leaderboard.forEach(entry => {
+      const li = document.createElement("li");
+      li.textContent = `${entry.rank}. ${entry.name} (${entry.timeTaken}s)`;
+      list.appendChild(li);
+    });
+
+    lb.appendChild(list);
+    document.getElementById("quiz-content").appendChild(lb);
+  }
+  </script>
 </body>
 </html>

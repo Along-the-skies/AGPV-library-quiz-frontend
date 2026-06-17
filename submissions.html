@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Submissions (Admin)</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Extra table styling */
+    .tables-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+    table.leaderboard {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    table.leaderboard caption {
+      font-weight: 600;
+      font-size: 1.2em;
+      margin: 10px;
+      color: #5b3ea6;
+      text-align: left;
+    }
+    table.leaderboard th,
+    table.leaderboard td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    table.leaderboard th {
+      background: #d9c8ff;
+      color: #2e1a47;
+    }
+    body.dark-mode table.leaderboard {
+      background: #2a1b4d;
+      color: #e6e0ff;
+    }
+    body.dark-mode table.leaderboard th {
+      background: #5a2ea6;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">AGVP Library Quiz</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+        <li><a href="submissions.html">Admin</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>📚 Admin Submissions View</h1>
+    <p>14 daily leaderboards (empty outlines)</p>
+  </section>
+
+  <!-- Content -->
+  <div class="content">
+    <h2>Leaderboards</h2>
+    <div class="tables-grid">
+      <!-- 14 empty tables -->
+      <!-- Each table has only caption + headers -->
+      <!-- Two per row thanks to grid -->
+      <!-- Example: Leaderboard 1 & 2 side by side -->
+      <!-- Repeat until Leaderboard 14 -->
+      <!-- You can later fill these with JS -->
+      <table class="leaderboard">
+        <caption>Leaderboard 1</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 2</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 3</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 4</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 5</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 6</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 7</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 8</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 9</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 10</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 11</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 12</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 13</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+      <table class="leaderboard">
+        <caption>Leaderboard 14</caption>
+        <tr><th>Rank</th><th>Name</th><th>Phone</th><th>Question</th><th>Answer</th><th>Correct</th><th>Time Taken</th></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>AGVP Library Quiz Admin Panel</p>
+  </footer>
+</body>
+</html>
