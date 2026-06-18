@@ -6,6 +6,19 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Check the referring page
+  const referrer = document.referrer;
+
+  if (!referrer.includes("quiz.html")) {
+    // Show error and block access
+    alert("❌ You must start the quiz from quiz.html!");
+    window.location.href = "quiz.html"; // optional: redirect them back
+  }
+});
+</script>
+
   <!-- Login -->
   <div id="login-form" class="login-box">
     <h2>Login to Quiz</h2>
@@ -128,6 +141,15 @@
 
     const result = await res.json();
     const feedback = document.getElementById("result");
+
+    if (res.ok){
+      alert("Answer submitted successfully!");
+      // ✅ Redirect back to quiz.html
+      window.location.href = "quiz.html";
+    } else {
+      alert("Error submitting answer.");
+    }
+    
 
     if (result.status === "error" && result.message.includes("Already submitted")) {
       feedback.textContent = "⚠️ Sorry, you've already done the quiz today.";
