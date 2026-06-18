@@ -7,7 +7,7 @@
 
 /* Base */
 body {
-  font-family: "Poppins", Arial, sans-serif;
+  font-family: "Poppins", "Noto Sans Malayalam", Arial, sans-serif;
   line-height: 1.6;
   transition: background 0.4s ease, color 0.4s ease;
 }

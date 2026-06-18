@@ -4,20 +4,22 @@
   <meta charset="UTF-8">
   <title>Quiz Question</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <script>
+<!--
+<script>
 document.addEventListener("DOMContentLoaded", () => {
   // Check the referring page
   const referrer = document.referrer;
 
   if (!referrer.includes("quiz.html")) {
-    // Show error and block access
     alert("❌ You must start the quiz from quiz.html!");
-    window.location.href = "quiz.html"; // optional: redirect them back
+    window.location.href = "quiz.html";
   }
 });
 </script>
+-->
 
   <!-- Login -->
   <div id="login-form" class="login-box">
@@ -71,8 +73,30 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    startQuiz(name, phone);
+    checkDuplicateEntry(name, phone, errorEl);
   };
+
+  async function checkDuplicateEntry(name, phone, errorEl) {
+    try {
+      const res = await fetch(`${API_BASE}/check-submission`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone: phone })
+      });
+
+      const data = await res.json();
+      
+      if (data.alreadySubmitted) {
+        errorEl.textContent = "❌ Sorry, you've answered today's question!";
+        return;
+      }
+
+      startQuiz(name, phone);
+    } catch (err) {
+      console.error("Error checking submission:", err);
+      startQuiz(name, phone);
+    }
+  }
 
   function startQuiz(name, phone) {
     userName = name;
@@ -150,6 +174,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       feedback.textContent = result.isCorrect ? "✅ Correct!" : "❌ Wrong!";
       document.querySelectorAll(".choice-btn").forEach(btn => btn.disabled = true);
+
+      // Redirect to quiz.html after 2 seconds
+      setTimeout(() => {
+        window.location.href = "quiz.html";
+      }, 2000);
     } catch (err) {
       feedback.textContent = "❌ Error submitting answer. Please try again.";
     }
