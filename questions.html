@@ -123,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function submitAnswer(questionNo, choice) {
+    const feedback = document.getElementById("result");
     const timeTaken = Math.floor((Date.now() - startTime) / 1000);
 
     const payload = {
@@ -133,53 +134,25 @@ document.addEventListener("DOMContentLoaded", () => {
       timeTaken: timeTaken
     };
 
-    const res = await fetch(`${API_BASE}/submit`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
+    try {
+      const res = await fetch(`${API_BASE}/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
 
-    const result = await res.json();
-    const feedback = document.getElementById("result");
+      const result = await res.json();
+      if (!res.ok) {
+        const message = result?.message || `Server error (${res.status})`;
+        feedback.textContent = `❌ ${message}`;
+        return;
+      }
 
-    if (res.ok){
-      alert("Answer submitted successfully!");
-      // ✅ Redirect back to quiz.html
-      window.location.href = "quiz.html";
-    } else {
-      alert("Error submitting answer.");
-    }
-    
-
-    if (result.status === "error" && result.message.includes("Already submitted")) {
-      feedback.textContent = "⚠️ Sorry, you've already done the quiz today.";
-    } else if (result.status === "error") {
-      feedback.textContent = `❌ ${result.message}`;
-    } else {
       feedback.textContent = result.isCorrect ? "✅ Correct!" : "❌ Wrong!";
-      loadLeaderboard();
+      document.querySelectorAll(".choice-btn").forEach(btn => btn.disabled = true);
+    } catch (err) {
+      feedback.textContent = "❌ Error submitting answer. Please try again.";
     }
-
-    // Disable choice buttons after submission
-    document.querySelectorAll(".choice-btn").forEach(btn => btn.disabled = true);
-  }
-
-  async function loadLeaderboard() {
-    const res = await fetch(`${API_BASE}/leaderboard`);
-    const data = await res.json();
-
-    const lb = document.createElement("div");
-    lb.innerHTML = "<h3>Today's Leaderboard</h3>";
-    const list = document.createElement("ol");
-
-    data.leaderboard.forEach(entry => {
-      const li = document.createElement("li");
-      li.textContent = `${entry.rank}. ${entry.name} (${entry.timeTaken}s)`;
-      list.appendChild(li);
-    });
-
-    lb.appendChild(list);
-    document.getElementById("quiz-content").appendChild(lb);
   }
   </script>
 </body>

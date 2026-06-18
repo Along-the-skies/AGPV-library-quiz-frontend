@@ -77,17 +77,15 @@
 
       try {
         const response = await fetch(
-          "https://agvp-library-backend.onrender.com/submissions?password=" + encodeURIComponent(password)
+          "https://agvp-library-backend.onrender.com/submissions?format=json&password=" + encodeURIComponent(password)
         );
 
         if (response.ok) {
-          const html = await response.text();   // backend returns HTML
+          const data = await response.json();
           loginError.textContent = "";
           loginBox.style.display = "none";
           adminContent.style.display = "block";
-
-          // Inject backend HTML directly
-          document.querySelector(".tables-grid").innerHTML = html;
+          renderLeaderboards(data.submissions);
         } else if (response.status === 403) {
           loginError.textContent = "Incorrect password.";
         } else {
@@ -96,6 +94,61 @@
       } catch (err) {
         loginError.textContent = "Error connecting to server.";
       }
+    }
+
+    function renderLeaderboards(submissionsByDate) {
+      const grid = document.querySelector(".tables-grid");
+      grid.innerHTML = "";
+      const dates = Object.keys(submissionsByDate).sort().reverse();
+
+      if (dates.length === 0) {
+        grid.innerHTML = "<p>No submissions yet.</p>";
+        return;
+      }
+
+      dates.forEach(dateKey => {
+        const submissions = submissionsByDate[dateKey].sort((a, b) => {
+          const timeA = parseFloat(a.timeTaken) || Infinity;
+          const timeB = parseFloat(b.timeTaken) || Infinity;
+          return timeA - timeB;
+        });
+
+        const tableBox = document.createElement("div");
+        tableBox.className = "table-box";
+
+        const heading = document.createElement("h2");
+        heading.textContent = `${dateKey} Leaderboard`;
+        tableBox.appendChild(heading);
+
+        const table = document.createElement("table");
+        table.className = "leaderboard";
+        table.innerHTML = `
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Question</th>
+            <th>Answer</th>
+            <th>Correct</th>
+            <th>Time Taken</th>
+          </tr>
+        `;
+
+        submissions.forEach(sub => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${sub.name || ""}</td>
+            <td>${sub.phone || ""}</td>
+            <td>${sub.questionNo || ""}</td>
+            <td>${sub.answer || ""}</td>
+            <td>${sub.isCorrect ? "✅" : "❌"}</td>
+            <td>${sub.timeTaken || ""}s</td>
+          `;
+          table.appendChild(row);
+        });
+
+        tableBox.appendChild(table);
+        grid.appendChild(tableBox);
+      });
     }
   </script>
 </body>
